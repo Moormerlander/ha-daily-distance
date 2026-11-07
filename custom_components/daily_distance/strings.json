@@ -12,6 +12,18 @@
           "min_speed": "Minimum speed",
           "reset_time": "Day change"
         }
+      },
+      "reconfigure": {
+        "title": "Reconfigure Daily Distance",
+        "description": "Change the speed sensor, speed unit, minimum speed or day change time.",
+        "data": {
+          "name": "Name",
+          "speed_sensor": "Select speed sensor",
+          "speed_sensor_manual": "Speed sensor entity ID (manual)",
+          "speed_unit": "Speed unit",
+          "min_speed": "Minimum speed",
+          "reset_time": "Day change"
+        }
       }
     },
     "selector": {
@@ -24,20 +36,35 @@
     },
     "error": {
       "invalid_sensor": "Enter a valid sensor entity ID starting with sensor.*.",
-      "both_sensors": "Select a sensor or enter an entity ID manually, not both."
+      "both_sensors": "Select a sensor or enter an entity ID manually, not both.",
+      "already_configured": "This speed sensor is already used by another Daily Distance entry."
     }
   },
   "entity": {
     "sensor": {
-      "today": {"name": "Today"},
-      "yesterday": {"name": "Yesterday"},
-      "week": {"name": "Week"},
-      "month": {"name": "Month"},
-      "year": {"name": "Year"},
-      "total": {"name": "Total"}
+      "today": {
+        "name": "Today"
+      },
+      "yesterday": {
+        "name": "Yesterday"
+      },
+      "week": {
+        "name": "Week"
+      },
+      "month": {
+        "name": "Month"
+      },
+      "year": {
+        "name": "Year"
+      },
+      "total": {
+        "name": "Total"
+      }
     }
   },
   "device": {
-    "device": {"name": "Daily Distance"}
+    "device": {
+      "name": "Daily Distance"
+    }
   }
 }

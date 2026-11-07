@@ -12,6 +12,18 @@
           "min_speed": "Mindestgeschwindigkeit",
           "reset_time": "Tageswechsel"
         }
+      },
+      "reconfigure": {
+        "title": "Tageskilometer neu konfigurieren",
+        "description": "Geschwindigkeitssensor, Einheit, Mindestgeschwindigkeit oder Tageswechsel ändern.",
+        "data": {
+          "name": "Name",
+          "speed_sensor": "Geschwindigkeitssensor auswählen",
+          "speed_sensor_manual": "Geschwindigkeitssensor (Entity-ID manuell)",
+          "speed_unit": "Geschwindigkeitseinheit",
+          "min_speed": "Mindestgeschwindigkeit",
+          "reset_time": "Tageswechsel"
+        }
       }
     },
     "selector": {
@@ -24,20 +36,35 @@
     },
     "error": {
       "invalid_sensor": "Bitte eine gültige Sensor-Entity-ID im Format sensor.* eingeben.",
-      "both_sensors": "Bitte entweder einen Sensor auswählen oder eine Entity-ID manuell eingeben, nicht beides."
+      "both_sensors": "Bitte entweder einen Sensor auswählen oder eine Entity-ID manuell eingeben, nicht beides.",
+      "already_configured": "Dieser Geschwindigkeitssensor wird bereits von einem anderen Tageskilometer-Eintrag verwendet."
     }
   },
   "entity": {
     "sensor": {
-      "today": {"name": "Heute"},
-      "yesterday": {"name": "Gestern"},
-      "week": {"name": "Woche"},
-      "month": {"name": "Monat"},
-      "year": {"name": "Jahr"},
-      "total": {"name": "Gesamt"}
+      "today": {
+        "name": "Heute"
+      },
+      "yesterday": {
+        "name": "Gestern"
+      },
+      "week": {
+        "name": "Woche"
+      },
+      "month": {
+        "name": "Monat"
+      },
+      "year": {
+        "name": "Jahr"
+      },
+      "total": {
+        "name": "Gesamt"
+      }
     }
   },
   "device": {
-    "device": {"name": "Tageskilometer"}
+    "device": {
+      "name": "Tageskilometer"
+    }
   }
 }

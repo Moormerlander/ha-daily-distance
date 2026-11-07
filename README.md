@@ -1,6 +1,6 @@
 # Daily Distance for Home Assistant
 
-**Version 0.5**
+**Version 0.51**
 
 A local Home Assistant custom integration that calculates driven distance by integrating a speed sensor. The source speed can be reported in **km/h or mph**.
 
@@ -83,3 +83,9 @@ This project is currently intended for testing and feedback. Please report issue
 ## License
 
 MIT
+
+
+## Changelog
+
+### 0.51
+- Added a custom integration icon in `custom_components/daily_distance/brand/icon.png`.

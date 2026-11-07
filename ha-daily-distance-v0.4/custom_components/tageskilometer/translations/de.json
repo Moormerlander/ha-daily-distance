@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Tageskilometer",
+        "description": "Berechnet die gefahrene Strecke aus einem Home-Assistant-Geschwindigkeitssensor. Sensor auswählen oder Entity-ID manuell eingeben und km/h oder mph als Einheit wählen.",
+        "data": {
+          "name": "Name",
+          "speed_sensor": "Geschwindigkeitssensor auswählen",
+          "speed_sensor_manual": "Geschwindigkeitssensor (Entity-ID manuell)",
+          "speed_unit": "Geschwindigkeitseinheit",
+          "min_speed": "Mindestgeschwindigkeit",
+          "reset_time": "Tageswechsel"
+        }
+      }
+    },
+    "selector": {
+      "speed_unit": {
+        "options": {
+          "km/h": "km/h",
+          "mph": "mph"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Bitte eine gültige Entity-ID eines Sensors im Format sensor.* eingeben.",
+      "both_sensors": "Bitte entweder einen Sensor auswählen oder eine Entity-ID manuell eingeben, nicht beides."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "today": {"name": "Heute"},
+      "yesterday": {"name": "Gestern"},
+      "week": {"name": "Woche"},
+      "month": {"name": "Monat"},
+      "year": {"name": "Jahr"},
+      "total": {"name": "Gesamt"}
+    }
+  },
+  "device": {
+    "device": {"name": "Tageskilometer"}
+  }
+}

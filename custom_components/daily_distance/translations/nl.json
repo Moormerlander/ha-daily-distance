@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Dagafstand",
+        "description": "Berekent de gereden afstand op basis van een Home Assistant-snelheidssensor. Selecteer de sensor of voer de entity-ID handmatig in en kies km/u of mph.",
+        "data": {
+          "name": "Naam",
+          "speed_sensor": "Snelheidssensor selecteren",
+          "speed_sensor_manual": "Entity-ID van snelheidssensor (handmatig)",
+          "speed_unit": "Snelheidseenheid",
+          "min_speed": "Minimumsnelheid",
+          "reset_time": "Dagwissel"
+        }
+      }
+    },
+    "selector": {
+      "speed_unit": {
+        "options": {
+          "km/h": "km/u",
+          "mph": "mph"
+        }
+      }
+    },
+    "error": {
+      "invalid_sensor": "Voer een geldige sensor-entity-ID in die begint met sensor.*.",
+      "both_sensors": "Selecteer een sensor of voer handmatig een entity-ID in, niet beide."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "today": {"name": "Vandaag"},
+      "yesterday": {"name": "Gisteren"},
+      "week": {"name": "Week"},
+      "month": {"name": "Maand"},
+      "year": {"name": "Jaar"},
+      "total": {"name": "Totaal"}
+    }
+  },
+  "device": {
+    "device": {"name": "Dagafstand"}
+  }
+}

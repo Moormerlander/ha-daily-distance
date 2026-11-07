@@ -1,7 +1,7 @@
 {
   "name": "Daily Distance",
   "content_in_root": false,
-  "filename": "tageskilometer",
+  "filename": "daily_distance",
   "render_readme": true,
   "homeassistant": "2026.11.0"
 }

@@ -1,6 +1,6 @@
 # Daily Distance for Home Assistant
 
-**Version 0.4**
+**Version 0.5**
 
 A local Home Assistant custom integration that calculates driven distance by integrating a speed sensor. The source speed can be reported in **km/h or mph**.
 
@@ -20,7 +20,7 @@ A local Home Assistant custom integration that calculates driven distance by int
 - Only the lifetime total uses `total_increasing`; period values use `measurement`
 - Data gaps longer than five minutes are not interpreted as driving
 - No vehicle-specific code or hard-coded sensor entity
-- English and German UI translations included
+- English, German and Dutch UI translations included
 
 ## Installation via Home Assistant Marketplace
 
@@ -32,7 +32,7 @@ Repository:
 
 Open **Settings → Marketplace → Add repository by URL**, enter the repository URL, and select **Integration**.
 
-The Marketplace installs the integration into `custom_components/tageskilometer`.
+The Marketplace installs the integration into `custom_components/daily_distance`.
 
 ## Configuration
 

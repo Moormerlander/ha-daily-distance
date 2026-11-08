@@ -59,6 +59,30 @@
       },
       "total": {
         "name": "Gesamt"
+      },
+      "trip_distance": {
+        "name": "Aktuelle Fahrtstrecke"
+      },
+      "trip_duration": {
+        "name": "Aktuelle Fahrtdauer"
+      },
+      "trip_average_speed": {
+        "name": "Durchschnittsgeschwindigkeit aktuelle Fahrt"
+      },
+      "trip_max_speed": {
+        "name": "Höchstgeschwindigkeit aktuelle Fahrt"
+      },
+      "last_trip_distance": {
+        "name": "Strecke letzte Fahrt"
+      },
+      "last_trip_duration": {
+        "name": "Fahrtdauer letzte Fahrt"
+      },
+      "last_trip_average_speed": {
+        "name": "Durchschnittsgeschwindigkeit letzte Fahrt"
+      },
+      "last_trip_max_speed": {
+        "name": "Höchstgeschwindigkeit letzte Fahrt"
       }
     }
   },

@@ -28,6 +28,7 @@ class DailyDistanceManager:
     MAX_GAP_SECONDS = 300
     SAVE_INTERVAL_SECONDS = 30
     CALCULATION_INTERVAL = timedelta(seconds=1)
+    TRIP_STOP_TIMEOUT_SECONDS = 120
     MPH_TO_KMH = 1.609344
 
     def __init__(self, hass: HomeAssistant, entry_id: str, config: dict[str, Any]) -> None:
@@ -43,8 +44,17 @@ class DailyDistanceManager:
         self._listeners: list[Callable[[], None]] = []
         self._save_handle: Any = None
         self._last_calculation: float | None = None
-        self._data: dict[str, Any] = {"days": {}, "total_km": 0.0}
+        self._data: dict[str, Any] = {
+            "days": {},
+            "total_km": 0.0,
+            "last_trip": None,
+        }
         self._current_day: str | None = None
+        self._trip_active = False
+        self._trip_started_at: float | None = None
+        self._trip_distance_km = 0.0
+        self._trip_last_moving_at: float | None = None
+        self._trip_max_speed_kmh = 0.0
 
     @staticmethod
     def _parse_time(value: time | str) -> time:
@@ -58,6 +68,7 @@ class DailyDistanceManager:
             self._data.update(stored)
         self._data.setdefault("days", {})
         self._data.setdefault("total_km", 0.0)
+        self._data.setdefault("last_trip", None)
         self._current_day = self._day_key(datetime.now().astimezone())
         self._prune_days()
 
@@ -159,6 +170,7 @@ class DailyDistanceManager:
 
         elapsed = timestamp - self._last_calculation
         self._last_calculation = timestamp
+
         if elapsed <= 0 or elapsed > self.MAX_GAP_SECONDS:
             return
 
@@ -167,20 +179,98 @@ class DailyDistanceManager:
             self._current_day = day_key
             await self.async_save()
             self._notify()
-            return
 
-        effective_speed = speed if speed >= self.min_speed else 0.0
-        speed_kmh = effective_speed if self.speed_unit == SPEED_UNIT_KMH else effective_speed * self.MPH_TO_KMH
-        distance_km = speed_kmh * elapsed / 3600.0
-        if distance_km <= 0:
-            return
+        moving = speed >= self.min_speed
+        speed_kmh = speed if self.speed_unit == SPEED_UNIT_KMH else speed * self.MPH_TO_KMH
 
-        days = self._data.setdefault("days", {})
-        days[day_key] = float(days.get(day_key, 0.0)) + distance_km
-        self._data["total_km"] = float(self._data.get("total_km", 0.0)) + distance_km
-        self._prune_days()
-        self._schedule_save()
+        if moving:
+            if not self._trip_active:
+                self._trip_active = True
+                self._trip_started_at = timestamp
+                self._trip_distance_km = 0.0
+                self._trip_max_speed_kmh = 0.0
+
+            self._trip_last_moving_at = timestamp
+            self._trip_max_speed_kmh = max(self._trip_max_speed_kmh, speed_kmh)
+
+            distance_km = speed_kmh * elapsed / 3600.0
+            if distance_km > 0:
+                self._trip_distance_km += distance_km
+
+                days = self._data.setdefault("days", {})
+                days[day_key] = float(days.get(day_key, 0.0)) + distance_km
+                self._data["total_km"] = float(self._data.get("total_km", 0.0)) + distance_km
+                self._prune_days()
+                self._schedule_save()
+
+        elif self._trip_active and self._trip_last_moving_at is not None:
+            if timestamp - self._trip_last_moving_at >= self.TRIP_STOP_TIMEOUT_SECONDS:
+                self._finish_trip(timestamp)
+
         self._notify()
+
+    def _finish_trip(self, timestamp: float) -> None:
+        if not self._trip_active or self._trip_started_at is None:
+            return
+
+        duration = max(0.0, timestamp - self._trip_started_at)
+        distance = max(0.0, self._trip_distance_km)
+        average_speed = distance / (duration / 3600.0) if duration > 0 else 0.0
+
+        self._data["last_trip"] = {
+            "distance_km": distance,
+            "duration_seconds": duration,
+            "average_speed_kmh": average_speed,
+            "max_speed_kmh": self._trip_max_speed_kmh,
+            "started_at": datetime.fromtimestamp(
+                self._trip_started_at, tz=datetime.now().astimezone().tzinfo
+            ).isoformat(),
+            "finished_at": datetime.fromtimestamp(
+                timestamp, tz=datetime.now().astimezone().tzinfo
+            ).isoformat(),
+        }
+        self._trip_active = False
+        self._trip_started_at = None
+        self._trip_last_moving_at = None
+        self._trip_distance_km = 0.0
+        self._trip_max_speed_kmh = 0.0
+        self._schedule_save()
+
+    @property
+    def trip_active(self) -> bool:
+        return self._trip_active
+
+    def trip_distance_km(self) -> float:
+        return self._trip_distance_km
+
+    def trip_duration_seconds(self, now: datetime | None = None) -> float:
+        if not self._trip_active or self._trip_started_at is None:
+            return 0.0
+        now = now or datetime.now().astimezone()
+        return max(0.0, now.timestamp() - self._trip_started_at)
+
+    def trip_average_speed_kmh(self) -> float:
+        duration = self.trip_duration_seconds()
+        return self._trip_distance_km / (duration / 3600.0) if duration > 0 else 0.0
+
+    def trip_max_speed_kmh(self) -> float:
+        return self._trip_max_speed_kmh if self._trip_active else 0.0
+
+    def last_trip(self) -> dict[str, Any] | None:
+        value = self._data.get("last_trip")
+        return value if isinstance(value, dict) else None
+
+    def last_trip_distance_km(self) -> float:
+        return float((self.last_trip() or {}).get("distance_km", 0.0))
+
+    def last_trip_duration_seconds(self) -> float:
+        return float((self.last_trip() or {}).get("duration_seconds", 0.0))
+
+    def last_trip_average_speed_kmh(self) -> float:
+        return float((self.last_trip() or {}).get("average_speed_kmh", 0.0))
+
+    def last_trip_max_speed_kmh(self) -> float:
+        return float((self.last_trip() or {}).get("max_speed_kmh", 0.0))
 
     def _value_for_day(self, day_key: str) -> float:
         return float(self._data.get("days", {}).get(day_key, 0.0))
@@ -220,6 +310,9 @@ class DailyDistanceManager:
 
     def to_output_distance(self, km: float) -> float:
         return km if self.speed_unit == SPEED_UNIT_KMH else km / self.MPH_TO_KMH
+
+    def to_output_speed(self, kmh: float) -> float:
+        return kmh if self.speed_unit == SPEED_UNIT_KMH else kmh / self.MPH_TO_KMH
 
     def daily_values(self, days: int = 30) -> dict[str, float]:
         keys = list(reversed(self._day_keys(days)))

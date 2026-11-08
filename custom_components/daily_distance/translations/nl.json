@@ -59,6 +59,30 @@
       },
       "total": {
         "name": "Totaal"
+      },
+      "trip_distance": {
+        "name": "Afstand huidige rit"
+      },
+      "trip_duration": {
+        "name": "Duur huidige rit"
+      },
+      "trip_average_speed": {
+        "name": "Gemiddelde snelheid huidige rit"
+      },
+      "trip_max_speed": {
+        "name": "Maximumsnelheid huidige rit"
+      },
+      "last_trip_distance": {
+        "name": "Afstand laatste rit"
+      },
+      "last_trip_duration": {
+        "name": "Duur laatste rit"
+      },
+      "last_trip_average_speed": {
+        "name": "Gemiddelde snelheid laatste rit"
+      },
+      "last_trip_max_speed": {
+        "name": "Maximumsnelheid laatste rit"
       }
     }
   },

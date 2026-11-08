@@ -1,6 +1,6 @@
 # Daily Distance for Home Assistant
 
-**Version 0.5.2**
+**Version 0.6**
 
 A local Home Assistant custom integration that calculates driven distance by integrating a speed sensor. The source speed can be reported in **km/h or mph**.
 
@@ -87,9 +87,17 @@ MIT
 
 ## Changelog
 
-### 0.5.2
+### 0.6
 - Added Home Assistant “Reconfigure” support to change the speed sensor, unit, minimum speed and day change time without removing the integration or losing stored distance data.
 
 
 ### 0.51
 - Added a custom integration icon in `custom_components/daily_distance/brand/icon.png`.
+
+
+### 0.6
+- Added automatic trip detection.
+- Added current trip distance and duration.
+- Added current trip average and maximum speed.
+- Added last trip distance, duration, average speed and maximum speed.
+- Trips end after 2 minutes below the configured minimum speed.

@@ -59,6 +59,30 @@
       },
       "total": {
         "name": "Total"
+      },
+      "trip_distance": {
+        "name": "Current trip distance"
+      },
+      "trip_duration": {
+        "name": "Current trip duration"
+      },
+      "trip_average_speed": {
+        "name": "Current trip average speed"
+      },
+      "trip_max_speed": {
+        "name": "Current trip maximum speed"
+      },
+      "last_trip_distance": {
+        "name": "Last trip distance"
+      },
+      "last_trip_duration": {
+        "name": "Last trip duration"
+      },
+      "last_trip_average_speed": {
+        "name": "Last trip average speed"
+      },
+      "last_trip_max_speed": {
+        "name": "Last trip maximum speed"
       }
     }
   },

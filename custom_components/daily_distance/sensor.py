@@ -18,6 +18,14 @@ SENSORS = (
     ("month", "month"),
     ("year", "year"),
     ("total", "total"),
+    ("trip_distance", "trip_distance"),
+    ("trip_duration", "trip_duration"),
+    ("trip_average_speed", "trip_average_speed"),
+    ("trip_max_speed", "trip_max_speed"),
+    ("last_trip_distance", "last_trip_distance"),
+    ("last_trip_duration", "last_trip_duration"),
+    ("last_trip_average_speed", "last_trip_average_speed"),
+    ("last_trip_max_speed", "last_trip_max_speed"),
 )
 
 
@@ -37,7 +45,14 @@ class DailyDistanceSensor(SensorEntity):
         self._attr_unique_id = f"{entry.entry_id}_{key}"
         self._attr_translation_key = key
         self._attr_state_class = SensorStateClass.TOTAL_INCREASING if key == "total" else SensorStateClass.MEASUREMENT
-        self._attr_native_unit_of_measurement = "km" if manager.speed_unit == SPEED_UNIT_KMH else "mi"
+        if key in {"trip_duration", "last_trip_duration"}:
+            self._attr_device_class = SensorDeviceClass.DURATION
+            self._attr_native_unit_of_measurement = "s"
+        elif key in {"trip_average_speed", "trip_max_speed", "last_trip_average_speed", "last_trip_max_speed"}:
+            self._attr_device_class = SensorDeviceClass.SPEED
+            self._attr_native_unit_of_measurement = "km/h" if manager.speed_unit == SPEED_UNIT_KMH else "mph"
+        else:
+            self._attr_native_unit_of_measurement = "km" if manager.speed_unit == SPEED_UNIT_KMH else "mi"
         self._remove_listener: Callable[[], None] | None = None
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, entry.entry_id)},
@@ -64,9 +79,27 @@ class DailyDistanceSensor(SensorEntity):
             value = self.manager.value_month_km()
         elif self._attr_translation_key == "year":
             value = self.manager.value_year_km()
-        else:
+        elif self._attr_translation_key == "total":
             value = self.manager.value_total_km()
-        return round(self.manager.to_output_distance(value), 3)
+            return round(self.manager.to_output_distance(value), 3)
+        elif self._attr_translation_key == "trip_distance":
+            return round(self.manager.to_output_distance(self.manager.trip_distance_km()), 3)
+        elif self._attr_translation_key == "trip_duration":
+            return round(self.manager.trip_duration_seconds(), 0)
+        elif self._attr_translation_key == "trip_average_speed":
+            speed = self.manager.trip_average_speed_kmh()
+            return round(self.manager.to_output_speed(speed), 1)
+        elif self._attr_translation_key == "trip_max_speed":
+            speed = self.manager.trip_max_speed_kmh()
+            return round(self.manager.to_output_speed(speed), 1)
+        elif self._attr_translation_key == "last_trip_distance":
+            return round(self.manager.to_output_distance(self.manager.last_trip_distance_km()), 3)
+        elif self._attr_translation_key == "last_trip_duration":
+            return round(self.manager.last_trip_duration_seconds(), 0)
+        elif self._attr_translation_key == "last_trip_average_speed":
+            return round(self.manager.to_output_speed(self.manager.last_trip_average_speed_kmh()), 1)
+        else:
+            return round(self.manager.to_output_speed(self.manager.last_trip_max_speed_kmh()), 1)
 
     @property
     def extra_state_attributes(self):

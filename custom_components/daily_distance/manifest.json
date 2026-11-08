@@ -1,7 +1,7 @@
 {
   "domain": "daily_distance",
   "name": "Daily Distance",
-  "version": "0.5.2",
+  "version": "0.6",
   "documentation": "https://github.com/Moormerlander/ha-daily-distance",
   "issue_tracker": "https://github.com/Moormerlander/ha-daily-distance/issues",
   "codeowners": [

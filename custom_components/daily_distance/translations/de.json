@@ -3,26 +3,30 @@
     "step": {
       "user": {
         "title": "Tageskilometer",
-        "description": "Berechnet die gefahrene Strecke aus einem Home-Assistant-Geschwindigkeitssensor. Sensor auswählen oder Entity-ID manuell eingeben und km/h oder mph wählen.",
+        "description": "Berechnet die gefahrene Strecke aus einem Home-Assistant-Geschwindigkeitssensor. Sensor auswählen oder Entity-ID manuell eingeben und km/h oder mph wählen. Kraftstoffpreis und Verbrauch können für die Kostenberechnung eingestellt werden.",
         "data": {
           "name": "Name",
           "speed_sensor": "Geschwindigkeitssensor auswählen",
           "speed_sensor_manual": "Geschwindigkeitssensor (Entity-ID manuell)",
           "speed_unit": "Geschwindigkeitseinheit",
           "min_speed": "Mindestgeschwindigkeit",
-          "reset_time": "Tageswechsel"
+          "reset_time": "Tageswechsel",
+          "fuel_price": "Kraftstoffpreis (€/l)",
+          "fuel_consumption": "Verbrauch (l/100 km)"
         }
       },
       "reconfigure": {
         "title": "Tageskilometer neu konfigurieren",
-        "description": "Geschwindigkeitssensor, Einheit, Mindestgeschwindigkeit oder Tageswechsel ändern.",
+        "description": "Geschwindigkeitssensor, Einheit, Mindestgeschwindigkeit oder Tageswechsel ändern. Kraftstoffpreis und Verbrauch können für die Kostenberechnung eingestellt werden.",
         "data": {
           "name": "Name",
           "speed_sensor": "Geschwindigkeitssensor auswählen",
           "speed_sensor_manual": "Geschwindigkeitssensor (Entity-ID manuell)",
           "speed_unit": "Geschwindigkeitseinheit",
           "min_speed": "Mindestgeschwindigkeit",
-          "reset_time": "Tageswechsel"
+          "reset_time": "Tageswechsel",
+          "fuel_price": "Kraftstoffpreis (€/l)",
+          "fuel_consumption": "Verbrauch (l/100 km)"
         }
       }
     },
@@ -83,6 +87,30 @@
       },
       "last_trip_max_speed": {
         "name": "Höchstgeschwindigkeit letzte Fahrt"
+      },
+      "fuel_cost_today": {
+        "name": "Kraftstoffkosten heute"
+      },
+      "fuel_cost_yesterday": {
+        "name": "Kraftstoffkosten gestern"
+      },
+      "fuel_cost_week": {
+        "name": "Kraftstoffkosten Woche"
+      },
+      "fuel_cost_month": {
+        "name": "Kraftstoffkosten Monat"
+      },
+      "fuel_cost_year": {
+        "name": "Kraftstoffkosten Jahr"
+      },
+      "fuel_cost_total": {
+        "name": "Kraftstoffkosten gesamt"
+      },
+      "trip_fuel_cost": {
+        "name": "Kraftstoffkosten aktuelle Fahrt"
+      },
+      "last_trip_fuel_cost": {
+        "name": "Kraftstoffkosten letzte Fahrt"
       }
     }
   },

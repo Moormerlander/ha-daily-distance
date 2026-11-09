@@ -10,6 +10,8 @@ from homeassistant.helpers.event import async_track_time_change, async_track_tim
 from homeassistant.helpers.storage import Store
 
 from .const import (
+    CONF_FUEL_CONSUMPTION,
+    CONF_FUEL_PRICE,
     CONF_MIN_SPEED,
     CONF_RESET_TIME,
     CONF_SPEED_SENSOR,
@@ -38,6 +40,8 @@ class DailyDistanceManager:
         self.speed_unit = config.get(CONF_SPEED_UNIT, SPEED_UNIT_KMH)
         self.min_speed = float(config[CONF_MIN_SPEED])
         self.reset_time = self._parse_time(config[CONF_RESET_TIME])
+        self.fuel_price = float(config.get(CONF_FUEL_PRICE, 0.0))
+        self.fuel_consumption = float(config.get(CONF_FUEL_CONSUMPTION, 0.0))
         self.store = Store(hass, STORE_VERSION, f"{STORE_KEY_PREFIX}.{entry_id}")
         self._unsub_interval: Callable[[], None] | None = None
         self._unsub_reset: Callable[[], None] | None = None
@@ -313,6 +317,35 @@ class DailyDistanceManager:
 
     def to_output_speed(self, kmh: float) -> float:
         return kmh if self.speed_unit == SPEED_UNIT_KMH else kmh / self.MPH_TO_KMH
+
+
+    def fuel_cost_for_km(self, distance_km: float) -> float:
+        """Return fuel cost in EUR for a distance in kilometers."""
+        return max(0.0, distance_km) * self.fuel_consumption / 100.0 * self.fuel_price
+
+    def fuel_cost_today(self) -> float:
+        return self.fuel_cost_for_km(self.value_today_km())
+
+    def fuel_cost_yesterday(self) -> float:
+        return self.fuel_cost_for_km(self.value_yesterday_km())
+
+    def fuel_cost_week(self) -> float:
+        return self.fuel_cost_for_km(self.value_period_km(7))
+
+    def fuel_cost_month(self) -> float:
+        return self.fuel_cost_for_km(self.value_month_km())
+
+    def fuel_cost_year(self) -> float:
+        return self.fuel_cost_for_km(self.value_year_km())
+
+    def fuel_cost_total(self) -> float:
+        return self.fuel_cost_for_km(self.value_total_km())
+
+    def trip_fuel_cost(self) -> float:
+        return self.fuel_cost_for_km(self.trip_distance_km())
+
+    def last_trip_fuel_cost(self) -> float:
+        return self.fuel_cost_for_km(self.last_trip_distance_km())
 
     def daily_values(self, days: int = 30) -> dict[str, float]:
         keys = list(reversed(self._day_keys(days)))

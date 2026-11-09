@@ -3,26 +3,30 @@
     "step": {
       "user": {
         "title": "Daily Distance",
-        "description": "Calculate driven distance from a Home Assistant speed sensor. Select the sensor or enter its entity ID manually and choose km/h or mph.",
+        "description": "Calculate driven distance from a Home Assistant speed sensor. Select the sensor or enter its entity ID manually and choose km/h or mph. Configure fuel price and fuel consumption to calculate fuel costs.",
         "data": {
           "name": "Name",
           "speed_sensor": "Select speed sensor",
           "speed_sensor_manual": "Speed sensor entity ID (manual)",
           "speed_unit": "Speed unit",
           "min_speed": "Minimum speed",
-          "reset_time": "Day change"
+          "reset_time": "Day change",
+          "fuel_price": "Fuel price (EUR/l)",
+          "fuel_consumption": "Fuel consumption (l/100 km)"
         }
       },
       "reconfigure": {
         "title": "Reconfigure Daily Distance",
-        "description": "Change the speed sensor, speed unit, minimum speed or day change time.",
+        "description": "Change the speed sensor, speed unit, minimum speed or day change time. Configure fuel price and fuel consumption to calculate fuel costs.",
         "data": {
           "name": "Name",
           "speed_sensor": "Select speed sensor",
           "speed_sensor_manual": "Speed sensor entity ID (manual)",
           "speed_unit": "Speed unit",
           "min_speed": "Minimum speed",
-          "reset_time": "Day change"
+          "reset_time": "Day change",
+          "fuel_price": "Fuel price (EUR/l)",
+          "fuel_consumption": "Fuel consumption (l/100 km)"
         }
       }
     },
@@ -83,6 +87,30 @@
       },
       "last_trip_max_speed": {
         "name": "Last trip maximum speed"
+      },
+      "fuel_cost_today": {
+        "name": "Fuel cost today"
+      },
+      "fuel_cost_yesterday": {
+        "name": "Fuel cost yesterday"
+      },
+      "fuel_cost_week": {
+        "name": "Fuel cost this week"
+      },
+      "fuel_cost_month": {
+        "name": "Fuel cost this month"
+      },
+      "fuel_cost_year": {
+        "name": "Fuel cost this year"
+      },
+      "fuel_cost_total": {
+        "name": "Total fuel cost"
+      },
+      "trip_fuel_cost": {
+        "name": "Current trip fuel cost"
+      },
+      "last_trip_fuel_cost": {
+        "name": "Last trip fuel cost"
       }
     }
   },

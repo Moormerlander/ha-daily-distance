@@ -3,26 +3,30 @@
     "step": {
       "user": {
         "title": "Dagafstand",
-        "description": "Berekent de gereden afstand op basis van een Home Assistant-snelheidssensor. Selecteer de sensor of voer de entity-ID handmatig in en kies km/u of mph.",
+        "description": "Berekent de gereden afstand op basis van een Home Assistant-snelheidssensor. Selecteer de sensor of voer de entity-ID handmatig in en kies km/u of mph. Stel brandstofprijs en verbruik in om de brandstofkosten te berekenen.",
         "data": {
           "name": "Naam",
           "speed_sensor": "Snelheidssensor selecteren",
           "speed_sensor_manual": "Entity-ID van snelheidssensor (handmatig)",
           "speed_unit": "Snelheidseenheid",
           "min_speed": "Minimumsnelheid",
-          "reset_time": "Dagwissel"
+          "reset_time": "Dagwissel",
+          "fuel_price": "Brandstofprijs (EUR/l)",
+          "fuel_consumption": "Verbruik (l/100 km)"
         }
       },
       "reconfigure": {
         "title": "Dagafstand opnieuw configureren",
-        "description": "Snelheidssensor, eenheid, minimale snelheid of dagwisseltijd wijzigen.",
+        "description": "Snelheidssensor, eenheid, minimale snelheid of dagwisseltijd wijzigen. Stel brandstofprijs en verbruik in om de brandstofkosten te berekenen.",
         "data": {
           "name": "Naam",
           "speed_sensor": "Snelheidssensor selecteren",
           "speed_sensor_manual": "Entity-ID van snelheidssensor (handmatig)",
           "speed_unit": "Snelheidseenheid",
           "min_speed": "Minimumsnelheid",
-          "reset_time": "Dagwissel"
+          "reset_time": "Dagwissel",
+          "fuel_price": "Brandstofprijs (EUR/l)",
+          "fuel_consumption": "Verbruik (l/100 km)"
         }
       }
     },
@@ -83,6 +87,30 @@
       },
       "last_trip_max_speed": {
         "name": "Maximumsnelheid laatste rit"
+      },
+      "fuel_cost_today": {
+        "name": "Brandstofkosten vandaag"
+      },
+      "fuel_cost_yesterday": {
+        "name": "Brandstofkosten gisteren"
+      },
+      "fuel_cost_week": {
+        "name": "Brandstofkosten deze week"
+      },
+      "fuel_cost_month": {
+        "name": "Brandstofkosten deze maand"
+      },
+      "fuel_cost_year": {
+        "name": "Brandstofkosten dit jaar"
+      },
+      "fuel_cost_total": {
+        "name": "Totale brandstofkosten"
+      },
+      "trip_fuel_cost": {
+        "name": "Brandstofkosten huidige rit"
+      },
+      "last_trip_fuel_cost": {
+        "name": "Brandstofkosten laatste rit"
       }
     }
   },

@@ -26,6 +26,14 @@ SENSORS = (
     ("last_trip_duration", "last_trip_duration"),
     ("last_trip_average_speed", "last_trip_average_speed"),
     ("last_trip_max_speed", "last_trip_max_speed"),
+    ("fuel_cost_today", "fuel_cost_today"),
+    ("fuel_cost_yesterday", "fuel_cost_yesterday"),
+    ("fuel_cost_week", "fuel_cost_week"),
+    ("fuel_cost_month", "fuel_cost_month"),
+    ("fuel_cost_year", "fuel_cost_year"),
+    ("fuel_cost_total", "fuel_cost_total"),
+    ("trip_fuel_cost", "trip_fuel_cost"),
+    ("last_trip_fuel_cost", "last_trip_fuel_cost"),
 )
 
 
@@ -51,6 +59,13 @@ class DailyDistanceSensor(SensorEntity):
         elif key in {"trip_average_speed", "trip_max_speed", "last_trip_average_speed", "last_trip_max_speed"}:
             self._attr_device_class = SensorDeviceClass.SPEED
             self._attr_native_unit_of_measurement = "km/h" if manager.speed_unit == SPEED_UNIT_KMH else "mph"
+        elif key.startswith("fuel_cost_") or key in {"trip_fuel_cost", "last_trip_fuel_cost"}:
+            self._attr_device_class = SensorDeviceClass.MONETARY
+            self._attr_native_unit_of_measurement = "EUR"
+            self._attr_state_class = (
+                SensorStateClass.TOTAL_INCREASING if key == "fuel_cost_total" else SensorStateClass.MEASUREMENT
+            )
+            self._attr_icon = "mdi:gas-station"
         else:
             self._attr_native_unit_of_measurement = "km" if manager.speed_unit == SPEED_UNIT_KMH else "mi"
         self._remove_listener: Callable[[], None] | None = None
@@ -98,8 +113,26 @@ class DailyDistanceSensor(SensorEntity):
             return round(self.manager.last_trip_duration_seconds(), 0)
         elif self._attr_translation_key == "last_trip_average_speed":
             return round(self.manager.to_output_speed(self.manager.last_trip_average_speed_kmh()), 1)
-        else:
+        elif self._attr_translation_key == "last_trip_max_speed":
             return round(self.manager.to_output_speed(self.manager.last_trip_max_speed_kmh()), 1)
+        elif self._attr_translation_key == "fuel_cost_today":
+            return round(self.manager.fuel_cost_today(), 2)
+        elif self._attr_translation_key == "fuel_cost_yesterday":
+            return round(self.manager.fuel_cost_yesterday(), 2)
+        elif self._attr_translation_key == "fuel_cost_week":
+            return round(self.manager.fuel_cost_week(), 2)
+        elif self._attr_translation_key == "fuel_cost_month":
+            return round(self.manager.fuel_cost_month(), 2)
+        elif self._attr_translation_key == "fuel_cost_year":
+            return round(self.manager.fuel_cost_year(), 2)
+        elif self._attr_translation_key == "fuel_cost_total":
+            return round(self.manager.fuel_cost_total(), 2)
+        elif self._attr_translation_key == "trip_fuel_cost":
+            return round(self.manager.trip_fuel_cost(), 2)
+        elif self._attr_translation_key == "last_trip_fuel_cost":
+            return round(self.manager.last_trip_fuel_cost(), 2)
+        else:
+            return 0.0
 
     @property
     def extra_state_attributes(self):
@@ -108,6 +141,8 @@ class DailyDistanceSensor(SensorEntity):
             "speed_unit": self.manager.speed_unit,
             "minimum_speed": self.manager.min_speed,
             "reset_time": self.manager.reset_time.strftime("%H:%M:%S"),
+            "fuel_price_eur_per_liter": self.manager.fuel_price,
+            "fuel_consumption_l_per_100km": self.manager.fuel_consumption,
             **({"daily_values_last_30_days": self.manager.daily_values(30)} if self._attr_translation_key == "today" else {}),
         }
 

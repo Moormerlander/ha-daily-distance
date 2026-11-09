@@ -7,10 +7,14 @@ from homeassistant import config_entries
 from homeassistant.helpers import selector
 
 from .const import (
+    CONF_FUEL_CONSUMPTION,
+    CONF_FUEL_PRICE,
     CONF_MIN_SPEED,
     CONF_RESET_TIME,
     CONF_SPEED_SENSOR,
     CONF_SPEED_UNIT,
+    DEFAULT_FUEL_CONSUMPTION,
+    DEFAULT_FUEL_PRICE,
     DEFAULT_MIN_SPEED,
     DEFAULT_RESET_TIME,
     DEFAULT_SPEED_UNIT,
@@ -83,6 +87,10 @@ class DailyDistanceConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         current_reset_time = current.get(
             CONF_RESET_TIME, DEFAULT_RESET_TIME.strftime("%H:%M:%S")
         )
+        current_fuel_price = float(current.get(CONF_FUEL_PRICE, DEFAULT_FUEL_PRICE))
+        current_fuel_consumption = float(
+            current.get(CONF_FUEL_CONSUMPTION, DEFAULT_FUEL_CONSUMPTION)
+        )
         if hasattr(current_reset_time, "strftime"):
             current_reset_time = current_reset_time.strftime("%H:%M:%S")
 
@@ -119,6 +127,26 @@ class DailyDistanceConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 vol.Required(
                     CONF_RESET_TIME, default=current_reset_time
                 ): selector.TimeSelector(),
+                vol.Required(
+                    CONF_FUEL_PRICE, default=current_fuel_price
+                ): selector.NumberSelector(
+                    selector.NumberSelectorConfig(
+                        min=0,
+                        max=10,
+                        step=0.01,
+                        mode=selector.NumberSelectorMode.BOX,
+                    )
+                ),
+                vol.Required(
+                    CONF_FUEL_CONSUMPTION, default=current_fuel_consumption
+                ): selector.NumberSelector(
+                    selector.NumberSelectorConfig(
+                        min=0,
+                        max=50,
+                        step=0.1,
+                        mode=selector.NumberSelectorMode.BOX,
+                    )
+                ),
             }
         )
 
